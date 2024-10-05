@@ -60,9 +60,9 @@ app.get('^/$|/index(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-app.get('/new-page(.html)?', (req, res) => {
-    console.log('new-page.html');
-    res.sendFile(path.join(__dirname, 'views', 'new-page.html'));
+app.get('/programminglanguages(.html)?', (req, res) => {
+    console.log('programminglanguages.html');
+    res.sendFile(path.join(__dirname, 'views', 'programminglanguages.html'));
 });
 
 //sends a redirect if old-page is request.
