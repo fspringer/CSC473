@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 //custom middleware logger
 app.use(logger);
 
+
 const whitelist=['https://www.yoursite.com','http://127.0.0.1:5500', 'http://localhost:3500'];
 const corsOption = {
     origin: (origin, callback) => {
