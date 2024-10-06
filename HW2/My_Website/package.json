@@ -14,8 +14,8 @@
     "dev": "nodemon server"
   },
   "main": "server.js",
-  "name": "practice7_middleware",
-  "description": "Middleware tutorial",
+  "name": "my_website",
+  "description": "simple website",
   "version": "1.0.0",
   "author": "",
   "license": "ISC"
