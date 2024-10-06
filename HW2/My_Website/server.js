@@ -1,5 +1,7 @@
 const express = require('express');
+const https = require('https')
 const app = express();
+const fs = require('fs')
 const path = require('path');
 const cors = require('cors'); //Cross Origin Resource Sharing (accessing resources over a different network)
 const { logger } = require('./middleware/logEvents');
@@ -118,4 +120,11 @@ app.all('*',(req, res) =>{
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const sslServer = https.createServer({
+    key: fs.readFileSync(path.join(__dirname, 'cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'cert','cert.pem')),
+},app)
+
+sslServer.listen(PORT, () => console.log(`Server running on port ${PORT}`))
