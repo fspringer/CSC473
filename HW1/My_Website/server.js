@@ -6,7 +6,7 @@ const path = require('path');
 const cors = require('cors'); //Cross Origin Resource Sharing (accessing resources over a different network)
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 3501;
 
 /*
 //custom middleware logger
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 app.use(logger);
 
 
-const whitelist=['https://www.yoursite.com','http://127.0.0.1:5500', 'http://localhost:3500'];
+const whitelist=['https://www.yoursite.com','http://127.0.0.1:5501', 'http://localhost:3501'];
 const corsOption = {
     origin: (origin, callback) => {
         if(whitelist.indexOf(origin) !== -1 || !origin){
@@ -124,8 +124,8 @@ app.use(errorHandler);
 
 //create https server
 const sslServer = https.createServer({
-    key: fs.readFileSync(path.join(__dirname, '../../cert','key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, '../../cert','cert.pem')),
+    key: fs.readFileSync(path.join(__dirname, '../../../cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, '../../../cert','cert.pem')),
 },app)
 
 //set a port listener
