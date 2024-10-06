@@ -122,9 +122,11 @@ app.use(errorHandler);
 
 //app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+//create https server
 const sslServer = https.createServer({
-    key: fs.readFileSync(path.join(__dirname, 'cert','key.pem')),
-    cert: fs.readFileSync(path.join(__dirname, 'cert','cert.pem')),
+    key: fs.readFileSync(path.join(__dirname, '../../cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, '../../cert','cert.pem')),
 },app)
 
+//set a port listener
 sslServer.listen(PORT, () => console.log(`Server running on port ${PORT}`))
