@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "data-fns": "^1.1.0",
+    "date-fns": "^4.1.0",
+    "express": "^4.21.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "main": "server.js",
+  "name": "my_website",
+  "description": "simple website",
+  "version": "1.0.0",
+  "author": "",
+  "license": "ISC"
+}
