@@ -17,51 +17,70 @@ function App() {
     classDefaults(newmyClasses);
   };
 
-  const classUpdate = (i, col, val) => {
+  const classUpdate = (index, field, value) => {
+
+    console.log(`index:${index} - field:${field} - value:${value}`)
+
+    //console.log(newmyClasses[index][field]);
+
     const newmyClasses = [...myClasses];
-    newmyClasses[i][col] = val;
+    newmyClasses[index][field] = value;
     classDefaults(newmyClasses);
   };
 
   const GPA_Calculator = () => {
+
     let pointsAccumulated = 0;
     let credictsAccumulated = 0;
+    let classPoints = 0;
+    let myPoints = 0;
 
+    console.log('-----------------')
     myClasses.forEach((myClass) => {
-        let myPoints = 0;
-        if(myClass.classGrade === 'A+')
-            myPoints = 4.0;
-        if(myClass.classGrade === 'A')
-          myPoints =  4.0;
-        if(myClass.classGrade === 'A-')
-          myPoints =  3.7;
-        if(myClass.classGrade === 'B+')
-          myPoints =  3.3;
-        if(myClass.classGrade === 'B')
-          myPoints =  3.0;
-        if(myClass.classGrade === 'B-')
-          myPoints =  2.7;    
-        if(myClass.classGrade === 'C+')
-          myPoints =  2.5;
-        if(myClass.classGrade === 'C')
-          myPoints =  2.0;        
-        if(myClass.classGrade === 'C-')
-          myPoints =  1.7;    
-        if(myClass.classGrade === 'D+')
-          myPoints =  1.3;
-        if(myClass.classGrade === 'D')
-          myPoints =  1.0;
-        if(myClass.classGrade === 'F')
-          myPoints =   0;
-        
-        pointsAccumulated += myPoints * myClass.classCredits;
-        credictsAccumulated += myClass.classCredits;      
+
+      console.log(`classTitle:${myClass.classTitle} - computeInGPA:${myClass.computeInGPA}`);
+
+      classPoints = 0;
+        if(myClass.computeInGPA === true)
+        {
+          if(myClass.classGrade === 'A+')
+            classPoints = 4.0;
+          if(myClass.classGrade === 'A')
+            classPoints =  4.0;
+          if(myClass.classGrade === 'A-')
+            classPoints =  3.7;
+          if(myClass.classGrade === 'B+')
+            classPoints =  3.3;
+          if(myClass.classGrade === 'B')
+            classPoints =  3.0;
+          if(myClass.classGrade === 'B-')
+            classPoints =  2.7;    
+          if(myClass.classGrade === 'C+')
+            classPoints =  2.5;
+          if(myClass.classGrade === 'C')
+            classPoints =  2.0;        
+          if(myClass.classGrade === 'C-')
+            classPoints =  1.7;    
+          if(myClass.classGrade === 'D+')
+            classPoints =  1.3;
+          if(myClass.classGrade === 'D')
+            classPoints =  1.0;
+          if(myClass.classGrade === 'F')
+            classPoints =   0;
+          
+          pointsAccumulated += classPoints * myClass.classCredits;
+          credictsAccumulated += myClass.classCredits;      
+          myPoints = (pointsAccumulated / credictsAccumulated);
+        }
     });
+
+    console.log("GPA_Calculator");
+    console.log(myPoints.toFixed(2));
 
     if(credictsAccumulated === 0)
         return 0;
     else
-      return (pointsAccumulated / credictsAccumulated).toFixed(2);
+      return myPoints.toFixed(2);
   };
 
 
@@ -110,20 +129,19 @@ function App() {
                 <option value='D+'>D+</option>
                 <option value='D'>D</option>
                 <option value='F'>F</option>
-
               </select>
               <input
                 type='number'
                 value={myClass.classCredits}
                 onChange={(e) => classUpdate(index, 'classCredits', Math.max(1, e.target.value))}
-                className='mr-4 p-4 w-1/3 border rounded border-gray-400' />
+                className='mr-4 p-4 w-1/3 border rounded border-gray-400' min='1'/>
 
               <label className='flex items-center'>
                 <input
                   type='checkbox'
                   checked={myClass.computeInGPA}
                   onChange={(e) => classUpdate(index, 'computeInGPA', e.target.checked)}
-                  className='mr-2'/>
+                  className='mr-1'/>
                 Calculate
               </label>
 
@@ -137,7 +155,7 @@ function App() {
           ))}
           <br></br>
           <h1 className=' text-3xl py-2 border-b-2 bg-green-500  border-stone-900 text-center'>GPA Calculator</h1>
-          <h2 className='text-white text-2xl text-center'>Your GPA: {GPA_Calculator()}</h2>
+          <h2 className='text-white text-2xl text-center'>GPA: {GPA_Calculator()}</h2>
         </form>
     </div>
   );
