@@ -1,0 +1,16 @@
+
+
+const Header=()=>{
+   const headerStyle={
+      backgroundColor: "mediumblue",
+      color: "#fff"
+   }
+   
+   return (
+      <header style={headerStyle}>
+         <h1>MY List</h1>
+      </header>
+   );
+};
+
+export default Header;
