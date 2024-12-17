@@ -1,11 +1,12 @@
 
 
+const Footer=({footerMsg, setFooterMsg})=>{
 
-const Footer=()=>{
+
 
    return(
-      <footer>
-         <p>My List</p>
+      <footer  >
+         <div> {footerMsg}</div>
       </footer>
    );
 };

@@ -1,6 +1,6 @@
 
 
-const Header=()=>{
+const Header=(props)=>{
    const headerStyle={
       backgroundColor: "mediumblue",
       color: "#fff"
@@ -8,9 +8,14 @@ const Header=()=>{
    
    return (
       <header style={headerStyle}>
-         <h1>MY List</h1>
+         <h1>{props.title}</h1>
       </header>
    );
 };
+
+Header.defaultProps={
+   title:"Default Titles"
+}
+
 
 export default Header;

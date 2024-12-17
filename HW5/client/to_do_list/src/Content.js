@@ -1,67 +1,87 @@
-import { useState } from "react";
+
+import {useRef} from "react"
 import {FaTrashAlt} from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaPaperPlane } from 'react-icons/fa'; 
 
-const Content=()=>{
 
-   //maintain states. 
-   const [items, setItems]=useState([
-      {
-         id: 1,
-         checked: false,
-         item: "Item1 to buy"
-      },
-      {
-         id: 2,
-         checked: false,
-         item: "Item2 to buy"
-      },
-      {
-         id: 3,
-         checked: false,
-         item: "Item3 to buy"
-      }
 
-   ]);
-
-   const handleCheck=(id)=>{
-      console.log(`key: ${id}`)
-      const listItems=items.map((item)=>item.id===id?{...item, checked: !item.checked} : item);
-      setItems(listItems);
-      localStorage.setItem("shoppinglist", JSON.stringify(listItems));
-   }
-
-   const handleDelete=(id)=>{
-      console.log(id);
-      const listItems=items.filter((item)=>item.id!==id);
-      setItems(listItems);
-   }
-
+const Content=({items, handleCheck, handleDelete, handleUpdate, updateItem, setUpdateItem})=>{
+   const [isHovered, setIsHovered] = useState(false); //makes a label into a inpu and vise versa
+   
+   const inputRef=useRef();
+   
    return(
-      <main>
-         {
+      <main>         
+         {items.length ? 
             <ul>
                {items.map((item)=>(
-                  <li className="item" key={item.id}>
-                     <input 
-                        type="checkbox"
-                        onChange={()=>handleCheck(item.id)}
-                        checked={item.checked}
-                     />
-                     <label style={(item.checked) ? {textDecoration:"line-through"} :null }
-                        onDoubleClick={()=>handleCheck(item.id)}>
-                        {item.item}
-                     </label>
-                     <FaTrashAlt
-                        onClick={()=>handleDelete(item.id)}
+                  <li className="item"  key={item.ItemID}>    
+                  
+                  <FaTrashAlt
+                        className="btn btn-primary float-right"
+                        onClick={()=>handleDelete(item.ItemID)}
                         role="button"
                         tabIndex=""
                      />
+
+                     <input 
+                        type="checkbox"
+                        onChange={()=>handleCheck(item.ItemID)}
+                        checked={item.checked}
+                     />
+
+                     <div
+                        onMouseEnter={() => setIsHovered(true)} 
+                        onMouseLeave={() => setIsHovered(false)}
+                     >
+                     {isHovered ? (       
+                           <form id="updateForm" onSubmit={(e)=>e.preventDefault()}>
+                              <label htmlFor="updateItem"/>
+                              <input id="updateItem" 
+                                    type="text" 
+                                    style={{
+                                       fontSize:"1rem",   
+                                       textAlign: "left",                                       
+                                       width: "200px",                                       //minWidth: "48px",
+                                       height: "2.0rem",
+                                       height: "48px",
+                                       minHeight: "48px",
+                                       // cursor: pointer;
+                                       marginRight: "0.5rem"
+                                    }}
+                                     ref={inputRef}
+                                     defaultValue={item.Name}                                     
+                                     onChange={(e)=>setUpdateItem(e.target.value)}
+                                     
+                              />
+                              <button  
+                                 type="submit"                                 
+                                 // arial-label="Update"
+                                 //onClick={()=>inputRef.current.focus()}
+                                 
+                                 onClick={()=>handleUpdate(item.ItemID)}
+                              >
+                                 <FaPaperPlane /> 
+                              </button>
+                           </form>
+
+                              ) : (
+                           <label 
+                              style={ (item.checked ? {textDecoration:"line-through"}:null)  }
+                              onDoubleClick={()=>handleCheck(item.ItemID)}
+                           >
+                              {item.Name}
+                           </label>      
+                              
+                     )}
+                     </div>
                   </li>
                ))}
-            </ul>
-         }
-
-
+               </ul>
+               : 
+               (<p style={{marginTop: "2rem"}}> Your list is empty.</p>) 
+            }         
       </main>
    );
 };
