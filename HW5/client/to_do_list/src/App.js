@@ -2,6 +2,7 @@
 import './App.css';
 import Header from './Header';
 import SearchItem from './SearchItem';
+import AddItem from './AddItem';
 import Content from './Content';
 import Footer from './Footer';
 import { useState } from "react";
@@ -15,6 +16,8 @@ function App() {
 
   //const [items, setItems]=useState(JSON.parse(localStorage.getItem("itemlist")));
   const [items, setItems]=useState([]);
+  const [newItem, setNewItem]=useState("");
+
   const [search, setSearch]=useState("");
   const [updateItem, setUpdateItem]=useState("");
   const [footerMsg, setFooterMsg]=useState("");
@@ -43,27 +46,7 @@ function App() {
     fetchEvents();
   }, []);
 
-  /*
-  //maintain states. 
-  const [items, setItems]=useState([
-    {
-        id: 1,
-        checked: false,
-        item: "Item1 to buy"
-    },
-    {
-        id: 2,
-        checked: false,
-        item: "Item2 to buy"
-    },
-    {
-        id: 3,
-        checked: false,
-        item: "Item3 to buy"
-    }
-
-  ]);
-  */
+ 
 
   const handleCheck=(id)=>{
     console.log("ID: ", id);
@@ -112,10 +95,8 @@ function App() {
 
       console.log("queryString", queryString);
 
-      //const response = await fetch(`http://localhost:3503/api/ItemList/update?id=${id}&name=${name}`); // API endpoint
-      //const response = await fetch(`http://localhost:3503/api/ItemList/update?${queryString}`); // API endpoint
       const response = await fetch("http://localhost:3503/api/ItemList/update/", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idVal, nameVal }),
       });
@@ -144,10 +125,78 @@ function App() {
     setUpdateItem("");
   }
 
+
+  const setAndSaveItems=(newItems)=>{
+    console.log(newItems);
+    setItems(newItems);
+    localStorage.setItem("itemlist", JSON.stringify(newItems));  
+  }
+
+  //const updateItemByID = async  (idVal, nameVal) => {
+
+  const addItem = async(item)=>{
+    //const id=items.length ? items[items.length-1].id + 1 : 1; //get the last id in the itemlist
+    
+    try {
+
+      let name=item;
+      const response = await fetch(My_URL+"/insert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      //console.log("777777777777777");
+      const Object = await response.json();
+      //console.log("888888888888888");
+
+      if(Object.success){
+        console.log("successful insert");
+        //setItems(data); // Update events with data from the database
+        console.log(Object);
+        let id= Object.ItemID;
+        //let name=item;
+        //let qty=0;
+        //console.log("returned id: ",id);
+        const myNewItem={ ItemID: id, Name: name, Qty: 0}; //create and item list object
+
+        //console.log("myNewItem: ", myNewItem);
+        const listItems=[...items, myNewItem]; //add the new item to the listItems.     
+        setAndSaveItems(listItems);
+        setFooterMsg(Object.message);
+
+      }
+
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      //setIsLoading(false);
+    }
+
+    
+
+
+  }
+
+  const handleSubmit= (e) =>{
+    console.log("newItem: ", newItem)
+    e.preventDefault(); //it prevents form reload on form submitted.
+    if(!newItem) return; //if the item is the empty string, do nothing. 
+    //addItem
+    addItem(newItem);
+    setNewItem("");//reset the addItem state to the empty state.
+  }
+
   return (
     <div className="App">
 
       <Header/>      
+
+      <AddItem 
+        newItem={newItem}
+        setNewItem={setNewItem}
+        handleSubmit={handleSubmit}
+      />  
+
       <SearchItem
         search={search}
         setSearch={setSearch}

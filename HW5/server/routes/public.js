@@ -113,6 +113,9 @@ router.get("/ItemList/all", async (req, res) => {
  `;
 
     rows = await db.query(query);
+
+    console.log(rows);
+
     res.json(Array.isArray(rows) ? rows : [rows]);
   } catch (error) {
     console.error("Search error:", error);
@@ -125,7 +128,7 @@ router.get("/ItemList/all", async (req, res) => {
 });
 
 
-router.post("/ItemList/update", async (req, res) => {
+router.put("/ItemList/update", async (req, res) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   res.set("Expires", "0");
   res.set("Pragma", "no-cache");
@@ -181,6 +184,74 @@ router.post("/ItemList/update", async (req, res) => {
 });
 
 
+
+router.post("/ItemList/insert", async (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Expires", "0");
+  res.set("Pragma", "no-cache");
+
+  console.log("666666666666666");
+
+  
+  let conn;
+  try {
+
+    const queryStr = req.query;
+    
+    console.log("");
+    console.log("query string: ", queryStr);
+    
+    //const {id, name} = queryStr;
+    
+    console.log("req.body: ", req.body);
+    const {name} = req.body;
+
+    
+    //console.log("name: ", name);
+
+    //let query = "UPDATE Item SET `Name` = ? WHERE ItemID = ?";
+    
+    let query = "INSERT INTO `Item`( `Name`) VALUES (?)";
+
+    //console.log(query)
+
+    let data;
+    rows = await db.query(query,[name] , (err, data) => {
+      if(err)
+        return res.json(err);
+    });
+
+    //console.log("rows: ", rows);
+
+    if (rows.affectedRows !== 0) {
+      //console.log("Nothing changed in this update");
+      
+      query = "SELECT ItemID FROM Item WHERE ItemID ORDER BY ItemID DESC LIMIT 1";
+      rows = await db.query(query);
+
+      console.log("newID", rows[0].ItemID);
+
+      res.status(200).json({
+        success: true,
+        ItemID: rows[0].ItemID,
+        message: `${name} inserted successfully`
+      });
+
+
+    }else{
+
+    }
+
+
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
 
 router.delete("/ItemList/:id", async (req, res) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
