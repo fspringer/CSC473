@@ -11,7 +11,7 @@ const SearchItem=({search, setSearch, handleSearchSubmit})=>{
             id="search"
             type="text"
             role="searchbox"
-            required
+            // required
             placeholder="Search Item and Press Enter"
             value={search}
             onChange={(e)=>setSearch(e.target.value)}

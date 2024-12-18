@@ -20,7 +20,12 @@ router.get("/ItemList/all", async (req, res) => {
 
     rows = await db.query(query);
 
+    
+
     res.json(Array.isArray(rows) ? rows : [rows]);
+
+    //console.log("jsonVal: ", Array.isArray(rows) ? rows : [rows] );
+
   } catch (error) {
     console.error("Search error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -77,7 +82,7 @@ router.get("/ItemList/search", async (req, res) => {
 });
 
 //perform update on component
-router.put("/ItemList/update", async (req, res) => {
+router.put("/ItemList", async (req, res) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   res.set("Expires", "0");
   res.set("Pragma", "no-cache");
@@ -104,7 +109,7 @@ router.put("/ItemList/update", async (req, res) => {
   }
 });
 
-router.post("/ItemList/insert", async (req, res) => {
+router.post("/ItemList", async (req, res) => {
   
   let conn;
   try {

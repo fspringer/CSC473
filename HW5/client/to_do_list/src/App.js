@@ -27,10 +27,14 @@ function App() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        
         const response = await fetch(My_URL+"/all"); // API endpoint
         if (!response.ok) throw new Error("Failed to fetch events");
 
         const data = await response.json();
+
+        //console.log("data: ", data);
+        
         setItems(data); // Update events with data from the database        
 
       } catch (error) {
@@ -71,11 +75,14 @@ function App() {
         name: nameVal
       });
     
-      
+      //console.log("nameVal: ",nameVal);
+      if(nameVal==="")
+        return;
 
       const queryString = queryParams.toString();
 
-      const response = await fetch(My_URL+"/update", {
+      //const response = await fetch(My_URL+"/update", {
+      const response = await fetch(My_URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idVal, nameVal }),
@@ -94,7 +101,20 @@ function App() {
   };
 
   const handleUpdate=(id)=>{    
+
     const listItems=items.map((item)=>item.ItemID===id?{...item, Name: updateItem} : item);
+    //here
+    //console.log("listItems", listItems);
+    const editingItem=listItems.filter((item)=>item.ItemID===id);
+    //console.log("editingItem", editingItem);
+
+    //console.log("editingItem.Name: ",editingItem[0].Name);
+
+    if(editingItem[0].Name===""){
+      alert("Must modify item first");
+      return;
+    }    
+
     setItems(listItems);
     updateItemByID(id, updateItem);
     localStorage.setItem("itemlist", JSON.stringify(listItems));
@@ -115,7 +135,8 @@ function App() {
     try {
 
       let name=item;
-      const response = await fetch(My_URL+"/insert", {
+      //const response = await fetch(My_URL+"/insert", {
+        const response = await fetch(My_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),

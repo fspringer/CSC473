@@ -15,7 +15,7 @@ const Header=(props)=>{
 };
 
 Header.defaultProps={
-   title:"CRUD Items"
+   title:"Hover over Items to Edit"
 }
 
 

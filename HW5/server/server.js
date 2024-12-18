@@ -19,8 +19,8 @@ const whitelist=["https://eventify.club:3503", "http://localhost:5173", "http://
 const corsOptions = {    
   origin: (origin, callback) => {
       
-      console.log("msg1", "corsOptions function");
-      console.log("msg2", origin);
+      //console.log("msg1", "corsOptions function");
+      //console.log("msg2", origin);
 
       if(whitelist.indexOf(origin) !== -1 || !origin){
           callback(null,true);
