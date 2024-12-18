@@ -3,103 +3,8 @@ const db = require("../db/config/db.config");
 
 const router = express.Router();
 
-/*
-router.get("/events/search", async (req, res) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-  res.set("Expires", "0");
-  res.set("Pragma", "no-cache");
-
-  console.log("11111111111111111");
-
-  let conn;
-  try {
-    const { title, date, organizer } = req.query;
-    let query = `
-      SELECT
-        Event.EventID,
-        Event.EventName,
-        GuestList.GuestListOwner,
-        Schedule.EventDate
-      FROM Event
-      JOIN GuestList ON Event.GuestListID = GuestList.GuestListID
-      JOIN Schedule ON Event.ScheduleID = Schedule.ScheduleID
-      WHERE 1=1
-    `;
-    const params = [];
-
-    if (title) {
-      query += " AND LOWER(Event.EventName) LIKE LOWER(?)";
-      params.push(`%${title}%`);
-    }
-
-    if (date) {
-      query += " AND DATE(Schedule.EventDate) = ?";
-      params.push(date);
-    }
-
-    if (organizer) {
-      query += " AND LOWER(GuestList.GuestListOwner) LIKE LOWER(?)";
-      params.push(`%${organizer}%`);
-    }
-
-    query += " ORDER BY Schedule.EventDate DESC";
-
-    rows = await db.query(query, params);
-    res.json(Array.isArray(rows) ? rows : [rows]);
-  } catch (error) {
-    console.error("Search error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (conn) {
-      conn.release();
-    }
-  }
-});
-*/
-
-/*
-router.get("/events/all", async (req, res) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-  res.set("Expires", "0");
-  res.set("Pragma", "no-cache");
-
-  console.log("22222222222222222");
-
-  let conn;
-  try {
-    let query = `
-      SELECT
-        Event.EventID,
-        Event.EventName,
-        GuestList.GuestListOwner,
-        Schedule.EventDate
-      FROM Event
-      JOIN GuestList ON Event.GuestListID = GuestList.GuestListID
-      JOIN Schedule ON Event.ScheduleID = Schedule.ScheduleID
-      ORDER BY Schedule.EventDate DESC
-    `;
-
-    rows = await db.query(query);
-    res.json(Array.isArray(rows) ? rows : [rows]);
-  } catch (error) {
-    console.error("Search error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (conn) {
-      conn.release();
-    }
-  }
-});
-*/
-
-//get data for component whenthe content load.
+//get data for component when the content load.
 router.get("/ItemList/all", async (req, res) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-  res.set("Expires", "0");
-  res.set("Pragma", "no-cache");
-
-  console.log("22222222222222222");
-
 
   let conn;
   try {
@@ -109,12 +14,11 @@ router.get("/ItemList/all", async (req, res) => {
         Item.ItemID, 
         Item.Name, 
         Item.Qty 
-    FROM Item
+    FROM Item 
+    
  `;
 
     rows = await db.query(query);
-
-    console.log(rows);
 
     res.json(Array.isArray(rows) ? rows : [rows]);
   } catch (error) {
@@ -128,45 +32,62 @@ router.get("/ItemList/all", async (req, res) => {
 });
 
 
+
+//search data for component 
+router.get("/ItemList/search", async (req, res) => {
+
+  const queryStr = req.query;
+
+  const {name} = queryStr;
+
+  let rows;
+  let query
+  try {
+
+    if(name!=""){
+      query = "SELECT Item.ItemID, Item.Name, Item.Qty " +
+                  "FROM Item "+ 
+                  "WHERE Item.Name LIKE CONCAT(?, '%') "+ 
+                  "ORDER BY Item.Name ASC";
+
+                  rows = await db.query(query,[name], (err, data) => {
+        if(err)
+          return res.json(err);
+      });
+
+    } else{
+      query = "SELECT Item.ItemID, Item.Name, Item.Qty " +
+              "FROM Item " + 
+              "ORDER BY Item.Name ASC";
+
+      rows = await db.query(query, (err, data) => {
+        if(err)
+          return res.json(err);
+      });
+    }
+
+    if (rows.affectedRows !== 0) {      
+      res.json(Array.isArray(rows) ? rows : [rows]);
+    }    
+  }catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+});
+
+//perform update on component
 router.put("/ItemList/update", async (req, res) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   res.set("Expires", "0");
   res.set("Pragma", "no-cache");
 
-  console.log("33333333333333333333333");
-
-  //http://localhost:3503/api/ItemList/update?id=${id}&name=${name}
   let conn;
   try {
-
-    const queryStr = req.query;
-    
-    console.log("");
-    console.log("query string: ", queryStr);
-    
-    //const {id, name} = queryStr;
-    
-    console.log("req.body: ", req.body);
+        
     const {idVal, nameVal} = req.body;
-
-    console.log("idVal: ", idVal);
-    console.log("nameVal: ", nameVal);
-
     let query = "UPDATE Item SET `Name` = ? WHERE ItemID = ?";
-
-    console.log(query)
-
-    /*
-    const [result] = await db
-    .promise()
-    .query(query, [req.params.eventId, req.userId]);
-    */
-
     rows = await db.query(query,[nameVal, idVal]);
-
-    console.log("");
-    console.log("Rows affected", rows);
-    console.log("");
 
     res.status(200).json({
       success: true,
@@ -183,37 +104,16 @@ router.put("/ItemList/update", async (req, res) => {
   }
 });
 
-
-
 router.post("/ItemList/insert", async (req, res) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-  res.set("Expires", "0");
-  res.set("Pragma", "no-cache");
-
-  console.log("666666666666666");
-
   
   let conn;
   try {
 
-    const queryStr = req.query;
     
-    console.log("");
-    console.log("query string: ", queryStr);
-    
-    //const {id, name} = queryStr;
-    
-    console.log("req.body: ", req.body);
     const {name} = req.body;
 
     
-    //console.log("name: ", name);
-
-    //let query = "UPDATE Item SET `Name` = ? WHERE ItemID = ?";
-    
     let query = "INSERT INTO `Item`( `Name`) VALUES (?)";
-
-    //console.log(query)
 
     let data;
     rows = await db.query(query,[name] , (err, data) => {
@@ -221,25 +121,17 @@ router.post("/ItemList/insert", async (req, res) => {
         return res.json(err);
     });
 
-    //console.log("rows: ", rows);
-
     if (rows.affectedRows !== 0) {
-      //console.log("Nothing changed in this update");
+      
       
       query = "SELECT ItemID FROM Item WHERE ItemID ORDER BY ItemID DESC LIMIT 1";
       rows = await db.query(query);
-
-      console.log("newID", rows[0].ItemID);
 
       res.status(200).json({
         success: true,
         ItemID: rows[0].ItemID,
         message: `${name} inserted successfully`
       });
-
-
-    }else{
-
     }
 
 
@@ -253,51 +145,21 @@ router.post("/ItemList/insert", async (req, res) => {
   }
 });
 
+//delete data from component
 router.delete("/ItemList/:id", async (req, res) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-  res.set("Expires", "0");
-  res.set("Pragma", "no-cache");
 
-  console.log("33333333333333333333333");
-
-  //http://localhost:3503/api/ItemList/update?id=${id}&name=${name}
-  let conn;
   try {
 
     const queryStr = req.query;
-    
-    console.log("req: ", req);
-
-    console.log("");
-    console.log("query string: ", queryStr);
-    
-    //const {id, name} = queryStr;
-    
-    //console.log("req.body: ", req.body);
-
-
 
     const id = req.params.id;
 
-    console.log("id: ", id);
-
-
-    // Delete the reservation
     const query = `
       DELETE FROM Item
       WHERE ItemID = ? 
     `;
     
-    console.log(query)
-
-    //return;
-
-
     rows = await db.query(query,[id]);
-
-    console.log("");
-    console.log("Rows affected", rows);
-    console.log("");
 
     res.status(200).json({
       success: true,
@@ -305,12 +167,8 @@ router.delete("/ItemList/:id", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Search error:", error);
+    
     res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (conn) {
-      conn.release();
-    }
   }
 });
 

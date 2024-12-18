@@ -3,7 +3,8 @@
 const Header=(props)=>{
    const headerStyle={
       backgroundColor: "mediumblue",
-      color: "#fff"
+      color: "#fff",
+      fontSize: "13pix"
    }
    
    return (
@@ -14,7 +15,7 @@ const Header=(props)=>{
 };
 
 Header.defaultProps={
-   title:"Default Titles"
+   title:"CRUD Items"
 }
 
 

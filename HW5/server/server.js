@@ -2,14 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const publicRoutes = require("./routes/public");
+//const dotenv = require("dotenv");
+
+//require('dotenv').config();
 
 const app = express();
 const PORT = 3503;
 //const PORT = 3504;
 
 const allowedOrigins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3503",  "https://eventify.club:3503"];
-
-//http://localhost:3503/api/events/search?title=James+Anniversary
 
 app.use(express.json());
 
@@ -31,23 +32,6 @@ const corsOptions = {
 };
 
  app.use(cors(corsOptions));
-
-
-/*
-app.use(
-  cors({
-    
-    origin: function (origin, callback) {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
-*/
 
 app.use(cookieParser());
 

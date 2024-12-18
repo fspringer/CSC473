@@ -10,8 +10,6 @@ import { useState } from "react";
 
 import React, { useState1, useEffect } from "react";
 
-
-
 function App() {
 
   //const [items, setItems]=useState(JSON.parse(localStorage.getItem("itemlist")));
@@ -29,12 +27,11 @@ function App() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:3503/api/ItemList/all"); // API endpoint
+        const response = await fetch(My_URL+"/all"); // API endpoint
         if (!response.ok) throw new Error("Failed to fetch events");
 
         const data = await response.json();
-        setItems(data); // Update events with data from the database
-        console.log(data);
+        setItems(data); // Update events with data from the database        
 
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -46,18 +43,9 @@ function App() {
     fetchEvents();
   }, []);
 
- 
-
-  const handleCheck=(id)=>{
-    console.log("ID: ", id);
-    const listItems=items.map((item)=>item.ItemID===id?{...item, checked: !item.checked} : item);
-    setItems(listItems);
-    localStorage.setItem("itemlist", JSON.stringify(listItems));
-  }
 
   const handleDelete=async(id)=>{
-    console.log("ID: ", id);
-
+    
     const response = await fetch(
       `${My_URL}/${id}`,
       {
@@ -65,18 +53,12 @@ function App() {
       }
     );
 
-    
     const Object = await response.json();
 
-    if(Object.success){
-      console.log("successful delete");
-      //setItems(data); // Update events with data from the database
-      console.log(Object);
+    if(Object.success){      
       setFooterMsg(Object.message);
-
       const listItems=items.filter((item)=>item.ItemID!==id);
       setItems(listItems);
-
     }
   }
 
@@ -89,23 +71,18 @@ function App() {
         name: nameVal
       });
     
-      console.log("queryParams: ", queryParams);
+      
 
       const queryString = queryParams.toString();
 
-      console.log("queryString", queryString);
-
-      const response = await fetch("http://localhost:3503/api/ItemList/update/", {
+      const response = await fetch(My_URL+"/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idVal, nameVal }),
       });
 
       const Object = await response.json();
-      if(Object.success){
-        console.log("successful update");
-        //setItems(data); // Update events with data from the database
-        console.log(Object);
+      if(Object.success){        
         setFooterMsg(Object.message);
       }
 
@@ -116,8 +93,7 @@ function App() {
     }
   };
 
-  const handleUpdate=(id)=>{
-    console.log(updateItem)
+  const handleUpdate=(id)=>{    
     const listItems=items.map((item)=>item.ItemID===id?{...item, Name: updateItem} : item);
     setItems(listItems);
     updateItemByID(id, updateItem);
@@ -126,8 +102,7 @@ function App() {
   }
 
 
-  const setAndSaveItems=(newItems)=>{
-    console.log(newItems);
+  const setAndSaveItems=(newItems)=>{    
     setItems(newItems);
     localStorage.setItem("itemlist", JSON.stringify(newItems));  
   }
@@ -145,21 +120,16 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
       });
-      //console.log("777777777777777");
+      
       const Object = await response.json();
-      //console.log("888888888888888");
-
+      
       if(Object.success){
-        console.log("successful insert");
-        //setItems(data); // Update events with data from the database
-        console.log(Object);
+        
         let id= Object.ItemID;
-        //let name=item;
-        //let qty=0;
-        //console.log("returned id: ",id);
+        
         const myNewItem={ ItemID: id, Name: name, Qty: 0}; //create and item list object
 
-        //console.log("myNewItem: ", myNewItem);
+
         const listItems=[...items, myNewItem]; //add the new item to the listItems.     
         setAndSaveItems(listItems);
         setFooterMsg(Object.message);
@@ -168,56 +138,64 @@ function App() {
 
     } catch (error) {
       console.error("Error fetching events:", error);
-    } finally {
-      //setIsLoading(false);
-    }
-
-    
-
-
+    } 
   }
 
-  const handleSubmit= (e) =>{
-    console.log("newItem: ", newItem)
+
+
+  const handleSubmit= (e) =>{    
     e.preventDefault(); //it prevents form reload on form submitted.
     if(!newItem) return; //if the item is the empty string, do nothing. 
-    //addItem
+    
     addItem(newItem);
     setNewItem("");//reset the addItem state to the empty state.
   }
 
+  const handleSearchSubmit= async (e) =>{
+    
+    e.preventDefault();
+
+    let name=e.target[0].value;
+    
+
+      try {
+
+        const response = await fetch(My_URL+"/search?name="+name); // API endpoint
+        
+        const Object = await response.json();
+
+        setItems(Object); // Update events with data from the database
+        setFooterMsg(Object.message);
+
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } 
+  }
+
   return (
     <div className="App">
-
-      <Header/>      
-
+      <Header/>  
       <AddItem 
         newItem={newItem}
         setNewItem={setNewItem}
         handleSubmit={handleSubmit}
-      />  
-
+      />
       <SearchItem
         search={search}
         setSearch={setSearch}
+        handleSearchSubmit={handleSearchSubmit}
       />
-
-      <Content
-        //items={items.filter(item=>((items.item).toLocaleLowerCase()).includes(search.toLocaleLowerCase()))}
-        items={items}
-        handleCheck={handleCheck}
+      <Content        
+        items={items}        
         handleDelete={handleDelete}    
         handleUpdate={handleUpdate}  
         updateItem={updateItem}
-        setUpdateItem={setUpdateItem}
-        
+        setUpdateItem={setUpdateItem}        
       />
-
       <Footer
       footerMsg={footerMsg}
       setFooterMsg={setFooterMsg}
       />
-
     </div>
   );
 }

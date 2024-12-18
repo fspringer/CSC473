@@ -6,7 +6,7 @@ import { FaPaperPlane } from 'react-icons/fa';
 
 
 
-const Content=({items, handleCheck, handleDelete, handleUpdate, updateItem, setUpdateItem})=>{
+const Content=({items, handleDelete, handleUpdate, updateItem, setUpdateItem})=>{
    const [isHovered, setIsHovered] = useState(false); //makes a label into a inpu and vise versa
    
    const inputRef=useRef();
@@ -25,63 +25,67 @@ const Content=({items, handleCheck, handleDelete, handleUpdate, updateItem, setU
                         tabIndex=""
                      />
 
-                     <input 
-                        type="checkbox"
-                        onChange={()=>handleCheck(item.ItemID)}
-                        checked={item.checked}
-                     />
-
                      <div
                         onMouseEnter={() => setIsHovered(true)} 
                         onMouseLeave={() => setIsHovered(false)}
                      >
-                     {isHovered ? (       
-                           <form id="updateForm" onSubmit={(e)=>e.preventDefault()}>
-                              <label htmlFor="updateItem"/>
-                              <input id="updateItem" 
-                                    type="text" 
-                                    style={{
-                                       fontSize:"1rem",   
-                                       textAlign: "left",                                       
-                                       width: "200px",                                       //minWidth: "48px",
-                                       height: "2.0rem",
-                                       height: "48px",
-                                       minHeight: "48px",
-                                       // cursor: pointer;
-                                       marginRight: "0.5rem"
-                                    }}
-                                     ref={inputRef}
-                                     defaultValue={item.Name}                                     
-                                     onChange={(e)=>setUpdateItem(e.target.value)}
-                                     
-                              />
-                              <button  
-                                 type="submit"                                 
-                                 // arial-label="Update"
-                                 //onClick={()=>inputRef.current.focus()}
-                                 
-                                 onClick={()=>handleUpdate(item.ItemID)}
-                              >
-                                 <FaPaperPlane /> 
-                              </button>
-                           </form>
+                        {/* {isHovered ? (        */}
+                              <form id="updateForm" onSubmit={(e)=>e.preventDefault()}>
+                                 {isHovered ? (    
+                                       <div>
+                                          <label htmlFor="updateItem"/>
+                                          <input id="updateItem" 
+                                                type="text" 
+                                                style={{
+                                                   fontSize:".85rem",   
+                                                   textAlign: "left",                                       
+                                                   width: "200px",                                       //minWidth: "48px",
+                                                   // height: "2.0rem",
+                                                   height: "48px",
+                                                   minHeight: "48px",
+                                                   // cursor: pointer;
+                                                   marginRight: "0.5rem"
+                                                }}
+                                                ref={inputRef}
+                                                defaultValue={item.Name}                                     
+                                                onChange={(e)=>setUpdateItem(e.target.value)}                                       
+                                          />
+                                          <button  
+                                             type="submit"           
+                                             text="Update"                      
+                                             //arial-label="Update"
+                                             //onClick={()=>inputRef.current.focus()}                                 
+                                             onClick={()=>handleUpdate(item.ItemID)}
+                                          >                                   
+                                             {/* <FaPaperPlane />  */}
+                                             Update
+                                          </button>
 
-                              ) : (
-                           <label 
-                              style={ (item.checked ? {textDecoration:"line-through"}:null)  }
-                              onDoubleClick={()=>handleCheck(item.ItemID)}
-                           >
-                              {item.Name}
-                           </label>      
-                              
-                     )}
+                                       </div> ) : (
+                                       <div >
+                                          <label style={{
+                                                   fontSize:"1.9rem",   
+                                                   textAlign: "left",                                       
+                                                   // width: "200px",                                       
+                                                   // height: "2.0rem",
+                                                   // height: "48px",
+                                                   // minHeight: "48px",
+                                                   // cursor: pointer;
+                                                   // marginRight: "0.5rem"
+                                                }}
+                                          >
+                                             {item.Name}
+                                          </label> 
+                                       </div>
+                                 )}
+                              </form>
                      </div>
                   </li>
                ))}
                </ul>
-               : 
-               (<p style={{marginTop: "2rem"}}> Your list is empty.</p>) 
-            }         
+         : 
+         (<p style={{marginTop: "2rem"}}> Your list is empty.</p>) 
+         }         
       </main>
    );
 };
