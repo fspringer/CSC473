@@ -1,0 +1,134 @@
+[
+  {
+    "Month": "January 2023",
+    "Total Expense": 504,
+    "Transactions": 6,
+    "TransType": "Utilities"
+  },
+  {
+    "Month": "February 2023",
+    "Total Expense": 845,
+    "Transactions": 6,
+    "TransType": "Computer Equipment"
+  },
+  {
+    "Month": "March 2023",
+    "Total Expense": 17,    
+    "Transactions": 1,
+    "TransType": "Gives"
+  },
+  {
+    "Month": "April 2023",
+    "Total Expense": 144,    
+    "Transactions": 5,
+    "TransType": "Cable"   
+  },
+  {
+    "Month": "May 2023",
+    "Total Expense": 160,    
+    "Transactions": 1,
+    "TransType": "Insurance"   
+  },
+  {
+    "Month": "June 2023",
+    "Total Expense": 2175,    
+    "Transactions": 3,
+    "TransType": "Rent"      
+  },
+  {
+    "Month": "July 2023",
+    "Total Expense": 190,    
+    "Transactions": 1,
+    "TransType": "Subscriptions"      
+  },
+  {
+    "Month": "August 2023",
+    "Total Expense": 99,    
+    "Transactions": 2,
+    "TransType": "Churc"      
+  },
+  {
+    "Month": "September 2023",
+    "Total Expense": 220,    
+    "Transactions": 1,
+    "TransType": "Plubming Work"  
+  },
+  {
+    "Month": "October 2023",
+    "Total Expense": 1205,    
+    "Transactions": 5,
+    "TransType": "School"  
+  },
+  {
+    "Month": "November 2023",
+    "Total Expense": 1190,
+    "Transactions": 4,
+    "TransType": "Electrical Work"  
+  },
+  {
+    "Month": "December 2023",
+    "Total Expense": 1808,    
+    "Transactions": 3,
+    "TransType": "Rent"  
+  },
+  {
+    "Month": "January 2024",
+    "Total Expense": 672,
+    "Transactions": 2,
+    "TransType": "Transportation"  
+  },
+  {
+    "Month": "February 2024",
+    "Total Expense": 914,
+    "Transactions": 3,
+    "TransType": "Cloth"  
+  },
+  {
+    "Month": "March 2024",
+    "Total Expense": 53,
+    "Transactions": 2,
+    "TransType": "BD Party"  
+  },
+  {
+    "Month": "April 2024",
+    "Total Expense": 155,
+    "Transactions": 3,
+    "TransType": "Church"  
+  },
+  {
+    "Month": "May 2024",
+    "Total Expense": 2121,
+    "Transactions": 2,
+    "TransType": "Rent"  
+  },
+  {
+    "Month": "June 2024",
+    "Total Expense": 195,    
+    "Transactions": 6,
+    "TransType": "Phone"  
+  },
+  {
+    "Month": "July 2024",
+    "Total Expense": 1220,    
+    "Transactions": 1,
+    "TransType": "Rent"  
+  },
+  {
+    "Month": "August 2024",
+    "Total Expense": 230,    
+    "Transactions": 1,
+    "TransType": "Church"   
+  },
+  {
+    "Month": "September 2024",
+    "Total Expense": 2440,    
+    "Transactions": 6,
+    "TransType": "Rent"  
+  },
+  {
+    "Month": "October 2024",
+    "Total Expense": 210,    
+    "Transactions": 8,
+    "TransType": "Give"  
+  }
+]
