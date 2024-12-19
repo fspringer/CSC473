@@ -4,13 +4,17 @@ import TransExpenses from './TransExpenses.json';
 
 const Heatmap = () => {
   const [tooltipData, setTooltipData] = useState(null);
-    
+  const [hoverPositionX, setHoverPositionX] = useState({ x: 0 });
+  const [hoverPositionY, setHoverPositionY] = useState({ y: 0 });
+  
   const handleMouseOut = () => {
     setTooltipData(null);
   };
 
   const handleMouseOver = (event, data) => {
-    setTooltipData(data);    
+    setTooltipData(data);   
+    setHoverPositionX({ x: event.clientX });
+    setHoverPositionY({ y: event.clientY }); 
   };
 
   const mapColor = (TransAmt) => {
@@ -75,15 +79,25 @@ const Heatmap = () => {
         })}
       </div>
 
-      {tooltipData && (
-        <div>
+      {tooltipData && (        
           <div className="tooltip-content"
             style={{
               color: "#fff",
-              backgroundColor: "#4a4848",                  
-              padding: "50px",                  
+              position: 'absolute',
+              backgroundColor: "#4a4848",   
+              borderRadius: '5px',               
+              padding: "5px",    
+              zIndex: 1000,
+              top: hoverPositionY.y, 
+              left: hoverPositionX.x ,    
+              boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.2)'          
             }}
           >
+        <div style={{  
+          padding: "10px",
+          backgroundColor: "#333",
+          color: "#fff",          
+          borderRadius: "5px"}}>
             <h4>{tooltipData.Month}</h4>
             <p>Total Expense: ${tooltipData['Total Expense']}</p>
             <p>Transactions: {tooltipData['Transactions']}</p>
